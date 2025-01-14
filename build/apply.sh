@@ -1,1 +1,1 @@
-cat rc.local > /etc
+cat rc.local > /etc/rc.local
