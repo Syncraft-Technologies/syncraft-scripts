@@ -1,0 +1,5 @@
+#!/bin/bash -e
+
+export DISPLAY=:0.0
+
+sudo python3 ~/syncraft-scripts/startup.py
