@@ -21,7 +21,7 @@ try:
 	with open(SYNCRAFT_MACHINE_PATH) as file:
 		machine_json = json.load(file)
 		if machine_json["bootVideo"] in os.listdir(BOOT_VIDEOS_DIR):
-			BOOT_VIDEO_PATH = machine_json["bootVideo"]
+			BOOT_VIDEO_PATH = os.path.join(BOOT_VIDEOS_DIR, machine_json["bootVideo"])
 except:
 	pass
 
