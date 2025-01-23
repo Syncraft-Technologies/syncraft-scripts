@@ -17,11 +17,24 @@ SYNCRAFT_MACHINE_PATH = os.path.join(HOME_DIR, "syncraft-machine.json")
 BOOT_VIDEOS_DIR = os.path.join(SYNCRAFT_SCRIPTS_DIR, "boot_videos")
 BOOT_VIDEO_PATH = os.path.join(BOOT_VIDEOS_DIR, "default.mp4")
 
+play_welcome_screen = False
+
 try:
 	with open(SYNCRAFT_MACHINE_PATH) as file:
 		machine_json = json.load(file)
-		if machine_json["bootVideo"] in os.listdir(BOOT_VIDEOS_DIR):
-			BOOT_VIDEO_PATH = os.path.join(BOOT_VIDEOS_DIR, machine_json["bootVideo"])
+
+		boot_video = machine_json.get("bootVideo")
+		welcome_screen = machine_json.get("welcomeScreen")
+
+		if boot_video in os.listdir(BOOT_VIDEOS_DIR):
+			BOOT_VIDEO_PATH = os.path.join(BOOT_VIDEOS_DIR, boot_video)
+
+		if welcome_screen == True:
+			play_welcome_screen = True
+			machine_json["welcomeScreen"] = False
+
+		with open(SYNCRAFT_MACHINE_PATH, "w") as file:
+			json.dump(machine_json, file, indent=2)
 except:
 	pass
 
@@ -30,3 +43,6 @@ if is_christmas():
 
 if is_new_year():
 	BOOT_VIDEO_PATH = os.path.join(BOOT_VIDEOS_DIR, "fireworks.mp4")
+
+if play_welcome_screen:
+	BOOT_VIDEO_PATH = os.path.join(BOOT_VIDEOS_DIR, "first_boot.mp4")
