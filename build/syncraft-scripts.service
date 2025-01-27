@@ -1,0 +1,9 @@
+[Unit]
+Description=Scripts to Syncraft 3D printers
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/syncraft-scripts/scripts/main.py
+User=pi
