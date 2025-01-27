@@ -1,5 +1,6 @@
 [Unit]
 Description=Scripts to Syncraft 3D printers
+Before=KlipperScreen.service
 
 [Install]
 WantedBy=multi-user.target
