@@ -1,5 +1,0 @@
-#!/bin/bash -e
-
-export DISPLAY=:0.0
-
-python3 /home/pi/syncraft-scripts/scripts/main.py
