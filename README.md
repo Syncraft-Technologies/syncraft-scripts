@@ -9,9 +9,11 @@ This repository contains scripts for Syncraft 3D printers.
 	cd ~
 	git clone https://github.com/Syncraft-Technologies/syncraft-scripts.git
 	```
-2. Run `apply.sh`
+2. Run `install.sh`
 	```bash
-	./build/apply.sh
+	cd ~
+	cd syncraft-scripts
+	./build/install.sh
 	```
 
 ## Machine configuration
