@@ -9,11 +9,11 @@ This repository contains scripts for Syncraft 3D printers.
 	cd ~
 	git clone https://github.com/Syncraft-Technologies/syncraft-scripts.git
 	```
-2. Run `install.sh`
+2. Run `install.sh` as superuser
 	```bash
 	cd ~
 	cd syncraft-scripts
-	./build/install.sh
+	sudo ./build/install.sh
 	```
 
 ## Machine configuration
