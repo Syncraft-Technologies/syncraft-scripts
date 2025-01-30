@@ -7,13 +7,13 @@ This repository contains scripts for Syncraft 3D printers.
 1. Clone the repository at home (`~`):
 	```bash
 	cd ~
+	```
+	```bash
 	git clone https://github.com/Syncraft-Technologies/syncraft-scripts.git
 	```
 2. Run `install.sh` as superuser
 	```bash
-	cd ~
-	cd syncraft-scripts
-	sudo ./build/install.sh
+	sudo ./syncraft-scripts/build/install.sh
 	```
 
 ## Machine configuration
