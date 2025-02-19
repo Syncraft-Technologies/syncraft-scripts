@@ -1,0 +1,12 @@
+[udisks1]
+Identity=unix-user:*
+Action=org.freedesktop.udisks1*
+ResultAny=yes
+[udisks2]
+Identity=unix-user:*
+Action=org.freedesktop.udisks2*
+ResultAny=yes
+[udisks2-other-seat]
+Identity=unix-user:*
+Action=org.freedesktop.udisks2*
+ResultAny=yes

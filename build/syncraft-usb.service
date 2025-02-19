@@ -1,0 +1,8 @@
+[Unit]
+Description=Syncraft USB Mount Service
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/udiskie --automount --no-config --notify --tray --appindicator
