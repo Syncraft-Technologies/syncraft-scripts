@@ -15,5 +15,5 @@ systemctl unmask syncraft-usb.service
 systemctl daemon-reload
 systemctl enable syncraft-usb
 systemctl restart syncraft-usb.service
-ln -s /media/ ~/printer_data/gcodes/USB
-mkdir ~/printer_data/gcodes/.JOB
+ln -s /media/ /home/pi/printer_data/gcodes/USB
+mkdir /home/pi/printer_data/gcodes/.JOB
