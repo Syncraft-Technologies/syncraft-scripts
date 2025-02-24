@@ -9,8 +9,8 @@ systemctl set-default multi-user.target
 systemctl restart syncraft-scripts.service
 
 apt-get install udiskie
-sudo echo 'ENV{ID_FS_USAGE}=="filesystem", ENV{UDISKS_FILESYSTEM_SHARED}="1"' > /etc/udev/rules.d/99-udisks2.rules
-sudo cat "$SCRIPTPATH"/10-udisks.pkla > /etc/polkit-1/localauthority/50-local.d/10-udisks.pkla
+echo 'ENV{ID_FS_USAGE}=="filesystem", ENV{UDISKS_FILESYSTEM_SHARED}="1"' > /etc/udev/rules.d/99-udisks2.rules
+cat "$SCRIPTPATH"/10-udisks.pkla > /etc/polkit-1/localauthority/50-local.d/10-udisks.pkla
 cat "$SCRIPTPATH"/syncraft-usb.service > /etc/systemd/system/syncraft-usb.service
 systemctl unmask syncraft-usb.service
 systemctl daemon-reload
