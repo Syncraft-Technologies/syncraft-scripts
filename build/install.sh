@@ -1,5 +1,6 @@
 SCRIPTPATH=$(dirname -- "$(readlink -f -- "$0")")
 
+apt-get install vlc
 cat "$SCRIPTPATH"/syncraft-scripts.service > /etc/systemd/system/syncraft-scripts.service
 systemctl unmask syncraft-scripts.service
 systemctl daemon-reload
