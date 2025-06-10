@@ -27,6 +27,5 @@ chown pi /home/pi/printer_data/gcodes/.JOB
 cat "$SCRIPTPATH"/syncraft-backlash-watcher.service > /etc/systemd/system/syncraft-backlash-watcher.service
 systemctl unmask syncraft-backlash-watcher.service
 systemctl daemon-reload
-systemctl enable syncraft-backlash-watcher.service
-systemctl set-default multi-user.target
+systemctl enable syncraft-backlash-watcher
 systemctl restart syncraft-backlash-watcher.service
