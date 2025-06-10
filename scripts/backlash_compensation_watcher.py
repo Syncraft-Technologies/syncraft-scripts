@@ -6,7 +6,8 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 GCODE_DIR = "/home/pi/printer_data/gcodes"
-SCRIPT = "/home/pi/backlash-compensation/backlashCompensationScript.py"
+SCRIPT = "/home/pi/syncraft-scripts/scripts/backlash_compensation.py"
+
 MAX_FILE_SIZE_MB = 5
 
 class GcodeHandler(FileSystemEventHandler):
