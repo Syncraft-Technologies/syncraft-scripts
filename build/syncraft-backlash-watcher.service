@@ -1,0 +1,15 @@
+[Unit]
+Description=Backlash G-code Watcher
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/syncraft-scripts/scripts/backlash_compensation_watcher.py
+WorkingDirectory=/home/pi/syncraft-scripts/scripts/
+StandardOutput=append:/home/pi/syncraft-scripts/logs/watcher.log
+StandardError=append:/home/pi/syncraft-scripts/logs/watcher.err
+User=pi
+
+
