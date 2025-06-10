@@ -8,3 +8,6 @@ rm -rf ~/printer_data/gcodes/USB
 rm -rf ~/printer_data/gcodes/.JOB
 service syncraft-usb stop
 rm /etc/systemd/system/syncraft-usb.service
+
+service syncraft-backlash-watcher stop
+rm /etc/systemd/system/syncraft-backlash-watcher.service
