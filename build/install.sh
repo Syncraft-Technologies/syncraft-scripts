@@ -24,9 +24,9 @@ chown pi /home/pi/printer_data/gcodes/USB
 mkdir /home/pi/printer_data/gcodes/.JOB
 chown pi /home/pi/printer_data/gcodes/.JOB
 
-cat "$SCRIPTPATH"/syncraft-backlash-watcher > /etc/systemd/system/syncraft-backlash-watcher
-systemctl unmask syncraft-backlash-watcher
+cat "$SCRIPTPATH"/syncraft-backlash-watcher.service > /etc/systemd/system/syncraft-backlash-watcher.service
+systemctl unmask syncraft-backlash-watcher.service
 systemctl daemon-reload
 systemctl enable syncraft-scripts
 systemctl set-default multi-user.target
-systemctl restart syncraft-backlash-watcher
+systemctl restart syncraft-backlash-watcher.service
