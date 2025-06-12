@@ -31,7 +31,8 @@ chown pi /home/pi/printer_data/gcodes/.JOB
 
 echo '---------------- Syncraft BacklashCompensation Install'
 cat "$SCRIPTPATH"/syncraft-backlash-watcher.service > /etc/systemd/system/syncraft-backlash-watcher.service
-systemctl unmask syncraft-backlash-watcher.service
 systemctl daemon-reload
+cd ~/home/pi/syncraft-scripts/scripts
+pip3 install watchdog
 systemctl enable syncraft-backlash-watcher
 systemctl restart syncraft-backlash-watcher.service
