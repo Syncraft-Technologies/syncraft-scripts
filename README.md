@@ -22,6 +22,19 @@ You can create a file called `syncraft-machine.json` at home (`~`) in order to s
 
 ### Allowed values
 
+#### `Backlash Compensation`
+
+Set in the file `scripts/offsets.ini` the compensation in X and Y axis.
+```bash
+X: 0.0
+Y: 0.0
+```
+
+Once changed offsets files, it´s necessary restart the service:
+ ```bash
+sudo systemctl restart syncraft-backlash-watcher.service
+```
+
 #### `bootVideo`
 
 Will be the video played on boot. Must be a string with any of the file names (with extension) from the `boot_videos` directory.
