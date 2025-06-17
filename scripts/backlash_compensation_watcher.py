@@ -8,7 +8,7 @@ from watchdog.events import FileSystemEventHandler
 GCODE_DIR = "/home/pi/printer_data/gcodes"
 SCRIPT = "/home/pi/syncraft-scripts/scripts/backlash_compensation.py"
 
-MAX_FILE_SIZE_MB = 5
+MAX_FILE_SIZE_MB = 30
 
 class GcodeHandler(FileSystemEventHandler):
     def on_created(self, event):
