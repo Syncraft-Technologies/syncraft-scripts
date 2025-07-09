@@ -15,7 +15,7 @@ def get_offsets():
             return offset_x, offset_y
     except Exception:
         pass
-    return 0.15, 0.45  # fallback seguro
+    return 0.0, 0.0  # fallback seguro
 
 def parse_gcode_line(line):
     return line.rstrip("\n").split()
