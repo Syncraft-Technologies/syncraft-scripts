@@ -6,7 +6,24 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 GCODE_DIR = "/home/pi/printer_data/gcodes"
-SCRIPT = "/home/pi/syncraft-scripts/scripts/backlash_compensation.py"
+MODEL_CONF = "/home/pi/syncraft-scripts/printer_model.conf"
+
+def get_model():
+    try:
+        with open(MODEL_CONF, "r") as f:
+            for line in f:
+                if line.strip().startswith("MODEL="):
+                    return line.strip().split("=")[1].upper()
+    except:
+        pass
+    return "X1"  # fallback padrão
+
+def get_script_path():
+    model = get_model()
+    if model == "IDEX":
+        return "/home/pi/syncraft-scripts/scripts/backlash_compensation_idex.py"
+    else:
+        return "/home/pi/syncraft-scripts/scripts/backlash_compensation_x1.py"
 
 MAX_FILE_SIZE_MB = 30
 
@@ -49,7 +66,9 @@ class GcodeHandler(FileSystemEventHandler):
 
         # 6) Chamamos o compensador apenas uma vez
         print(f"[Watcher] Processando arquivo: {filepath}")
-        subprocess.run(["python3", SCRIPT, filepath, filepath], check=False)
+        script_path = get_script_path()
+        print(f"[Watcher] Modelo: {get_model()} – Usando script: {os.path.basename(script_path)}")
+        subprocess.run(["python3", script_path, filepath, filepath], check=False)
         print(f"[Watcher] Pós-processamento concluído: {filepath}")
 
 	    # 7) Agora vamos forçar o DELETE + UPLOAD para disparar o “files changed”

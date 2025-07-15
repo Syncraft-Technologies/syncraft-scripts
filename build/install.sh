@@ -1,3 +1,7 @@
+echo '---------------- Configuração do Modelo da Impressora'
+echo "MODELO DETECTADO: $1"
+echo "MODEL=$1" > /home/pi/syncraft-scripts/printer_model.conf
+
 SCRIPTPATH=$(dirname -- "$(readlink -f -- "$0")")
 
 echo '---------------- VLC Install'
