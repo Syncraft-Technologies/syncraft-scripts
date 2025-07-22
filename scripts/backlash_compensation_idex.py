@@ -2,11 +2,10 @@
 import os
 import sys
 
-version_code = "o3HighMini0-IDEX"
+version_code = "o3HighMini0-IDEX-ZSafe"
 directoryPath = os.path.dirname(os.path.realpath(__file__))
 
 def get_offsets_for_tool(tool_id):
-    """Lê offsets para a ferramenta ativa a partir de arquivos offsets_T{n}.ini"""
     filenames = [
         f"offsets_T{tool_id}.ini",
         "offsets.ini"  # fallback padrão (para X1 ou config genérica)
@@ -22,7 +21,7 @@ def get_offsets_for_tool(tool_id):
                 return offset_x, offset_y
         except Exception:
             continue
-    return 0.0, 0.0  # fallback final
+    return 0.0, 0.0
 
 def parse_gcode_line(line):
     return line.rstrip("\n").split()
@@ -108,18 +107,24 @@ def process_line(tokens, current_x, current_y, blX, blY, offset_x, offset_y):
     if has_extrusion and (x_changed or y_changed):
         travel_tokens = [tokens[0]]
         if "F" in params:
-            travel_tokens.append("F" + str(int(params["F"])))
+            travel_tokens.append(f"F{int(params['F'])}")
         if "X" in params:
-            travel_tokens.append("X" + f"{(current_x - offset_x) if blX else (current_x + offset_x):.3f}")
+            travel_tokens.append(f"X{(current_x - offset_x) if blX else (current_x + offset_x):.3f}")
         if "Y" in params:
-            travel_tokens.append("Y" + f"{current_y:.3f}")
+            travel_tokens.append(f"Y{current_y:.3f}")
         travel_tokens.append(";BL")
 
     new_tokens = tokens.copy()
     if "X" in params:
-        new_tokens[token_map["X"]] = "X" + f"{new_x:.3f}"
+        new_tokens[token_map["X"]] = f"X{new_x:.3f}"
     if "Y" in params:
-        new_tokens[token_map["Y"]] = "Y" + f"{new_y:.3f}"
+        new_tokens[token_map["Y"]] = f"Y{new_y:.3f}"
+    if "Z" in params:
+        new_tokens[token_map["Z"]] = f"Z{params['Z']:.3f}"
+    if "E" in params:
+        new_tokens[token_map["E"]] = f"E{params['E']:.5f}"
+    if "F" in params:
+        new_tokens[token_map["F"]] = f"F{int(params['F'])}"
 
     return new_tokens, new_x, new_y, new_blX, new_blY, travel_tokens, has_extrusion
 
@@ -159,7 +164,6 @@ def main():
                 outfile.write(line)
                 continue
 
-            # Detecção de troca de ferramenta (T0, T1, ...)
             if tokens[0].startswith("T") and len(tokens[0]) > 1:
                 try:
                     new_tool = int(tokens[0][1:])
