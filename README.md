@@ -33,11 +33,27 @@ You can create a file called `syncraft-machine.json` at home (`~`) in order to s
 
 #### `Backlash Compensation`
 
-Set in the file `scripts/offsets.ini` the compensation in X and Y axis.
-```bash
-X: 0.0
-Y: 0.0
-```
+1. X1
+
+	Set in the file `scripts/offsets.ini` the compensation in X and Y axis.
+	```bash
+	X: 0.0
+	Y: 0.0
+	```
+
+2. IDEX
+	
+	Set in the file `scripts/offsets_T0.ini` the compensation in X and Y axis.
+	```bash
+	X: 0.0
+	Y: 0.0
+	```
+
+	Set in the file `scripts/offsets_T1.ini` the compensation in X and Y axis.
+	```bash
+	X: 0.0
+	Y: 0.0 // The same from T0
+	```
 
 Once changed offsets files, it´s necessary restart the service:
  ```bash
