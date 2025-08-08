@@ -1,43 +1,21 @@
 #!/usr/bin/env python3
 import os
 import sys
-import json
 
 version_code = "o3HighMini0"
 directoryPath = os.path.dirname(os.path.realpath(__file__))
 
-# def get_offsets():
-#     try:
-#         with open(os.path.join(directoryPath, "offsets.ini"), "r") as f:
-#             lines = f.readlines()
-#         if len(lines) >= 2:
-#             offset_x = float(lines[0].strip())
-#             offset_y = float(lines[1].strip())
-#             return offset_x, offset_y
-#     except Exception:
-#         pass
-#     return 0.0, 0.0  # fallback seguro
-
 def get_offsets():
-    """Carrega os offsets do arquivo JSON"""
     try:
-        json_path = os.path.join(directoryPath, "~/syncraft-machine.json")
-        with open(json_path, "r", encoding='utf-8') as f:
-            data = json.load(f)
-        
-        # Suporte para diferentes estruturas JSON
-        if isinstance(data, dict):
-            offset_x = float(data.get("bc_x0", 0.0))
-            offset_y = float(data.get("bc_y0", 0.0))
-        else:
-            # Se for uma lista [x, y]
-            offset_x = float(data[0]) if len(data) > 0 else 0.0
-            offset_y = float(data[1]) if len(data) > 1 else 0.0
-            
-        return offset_x, offset_y
-    except (FileNotFoundError, json.JSONDecodeError, KeyError, IndexError, ValueError) as e:
-        print(f"Aviso: Erro ao carregar offsets.json ({e}). Usando valores padrão (0.0, 0.0)")
-        return 0.0, 0.0
+        with open(os.path.join(directoryPath, "offsets.ini"), "r") as f:
+            lines = f.readlines()
+        if len(lines) >= 2:
+            offset_x = float(lines[0].strip())
+            offset_y = float(lines[1].strip())
+            return offset_x, offset_y
+    except Exception:
+        pass
+    return 0.0, 0.0  # fallback seguro
 
 def parse_gcode_line(line):
     return line.rstrip("\n").split()
