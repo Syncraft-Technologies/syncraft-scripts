@@ -1,12 +1,16 @@
 #!/bin/bash
 
-# Função para carregar modelo da impressora do JSON
 load_printer_model() {
-    local json_file="~/syncraft-machine.json"  # JSON na pasta raiz do sistema
+    local json_file="$HOME/syncraft-machine.json"  # JSON na pasta home do usuário
     
     if [ ! -f "$json_file" ]; then
         echo "ERRO: Arquivo JSON não encontrado em $json_file"
-        exit 1
+        echo "Tentando localizar em /home/pi/syncraft-machine.json..."
+        json_file="/home/pi/syncraft-machine.json"
+        if [ ! -f "$json_file" ]; then
+            echo "ERRO: Arquivo JSON também não encontrado em $json_file"
+            exit 1
+        fi
     fi
     
     # Verificar se jq está instalado

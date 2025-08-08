@@ -21,7 +21,20 @@ directoryPath = os.path.dirname(os.path.realpath(__file__))
 def get_offsets():
     """Carrega os offsets do arquivo JSON"""
     try:
-        json_path = os.path.join(directoryPath, "~/syncraft-machine.json")
+        # Primeiro tenta na pasta home do usuário atual
+        json_path = os.path.expanduser("~/syncraft-machine.json")
+        
+        # Se não encontrar, tenta na pasta home do pi
+        if not os.path.exists(json_path):
+            json_path = "/home/pi/syncraft-machine.json"
+        
+        # Se ainda não encontrar, tenta no mesmo diretório do script
+        if not os.path.exists(json_path):
+            json_path = os.path.join(directoryPath, "syncraft-machine.json")
+        
+        if not os.path.exists(json_path):
+            raise FileNotFoundError(f"Arquivo JSON não encontrado em nenhum local")
+            
         with open(json_path, "r", encoding='utf-8') as f:
             data = json.load(f)
         
@@ -34,9 +47,10 @@ def get_offsets():
             offset_x = float(data[0]) if len(data) > 0 else 0.0
             offset_y = float(data[1]) if len(data) > 1 else 0.0
             
+        print(f"JSON carregado de: {json_path}")
         return offset_x, offset_y
     except (FileNotFoundError, json.JSONDecodeError, KeyError, IndexError, ValueError) as e:
-        print(f"Aviso: Erro ao carregar offsets.json ({e}). Usando valores padrão (0.0, 0.0)")
+        print(f"Aviso: Erro ao carregar syncraft-machine.json ({e}). Usando valores padrão (0.0, 0.0)")
         return 0.0, 0.0
 
 def parse_gcode_line(line):
