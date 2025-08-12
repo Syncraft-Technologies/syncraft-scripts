@@ -1,11 +1,47 @@
+#!/bin/bash
+
+load_printer_model() {
+    local json_file="$HOME/syncraft-machine.json"  # JSON na pasta home do usuário
+    
+    if [ ! -f "$json_file" ]; then
+        echo "ERRO: Arquivo JSON não encontrado em $json_file"
+        echo "Tentando localizar em /home/pi/syncraft-machine.json..."
+        json_file="/home/pi/syncraft-machine.json"
+        if [ ! -f "$json_file" ]; then
+            echo "ERRO: Arquivo JSON também não encontrado em $json_file"
+            exit 1
+        fi
+    fi
+    
+    # Verificar se jq está instalado
+    if ! command -v jq &> /dev/null; then
+        echo "Instalando jq para processamento JSON..."
+        apt-get update && apt-get install -y jq
+    fi
+    
+    # Carregar modelo da impressora do JSON
+    PRINTER_MODEL=$(jq -r '.printerModel // empty' "$json_file" 2>/dev/null)
+    
+    if [ -z "$PRINTER_MODEL" ] || [ "$PRINTER_MODEL" = "null" ]; then
+        echo "ERRO: Modelo da impressora não encontrado no JSON"
+        exit 1
+    fi
+    
+    echo "Modelo carregado do JSON: $PRINTER_MODEL"
+}
+
+# Carregar configuração do JSON
+echo '---------------- Carregando Configuração JSON'
+load_printer_model
+
 echo '---------------- Configuração do Modelo da Impressora'
-echo "MODELO DETECTADO: $1"
-echo "MODEL=$1" > /home/pi/syncraft-scripts/printer_model.conf
+echo "MODELO DETECTADO: $PRINTER_MODEL"
+echo "MODEL=$PRINTER_MODEL" > /home/pi/syncraft-scripts/printer_model.conf
 
 SCRIPTPATH=$(dirname -- "$(readlink -f -- "$0")")
 
 echo '---------------- VLC Install'
-apt-get install vlc
+apt-get install -y vlc
 
 echo '---------------- Syncraft Scripts Install'
 cat "$SCRIPTPATH"/syncraft-scripts.service > /etc/systemd/system/syncraft-scripts.service
@@ -16,7 +52,7 @@ systemctl set-default multi-user.target
 systemctl restart syncraft-scripts.service
 
 echo '---------------- Udiskie Install'
-apt-get install udiskie
+apt-get install -y udiskie
 echo 'ENV{ID_FS_USAGE}=="filesystem", ENV{UDISKS_FILESYSTEM_SHARED}="1"' > /etc/udev/rules.d/99-udisks2.rules
 cat "$SCRIPTPATH"/10-udisks.pkla > /etc/polkit-1/localauthority/50-local.d/10-udisks.pkla
 
@@ -27,16 +63,20 @@ systemctl daemon-reload
 systemctl enable syncraft-usb
 systemctl restart syncraft-usb.service
 
-echo '---------------- GCODE folder permitions'
+echo '---------------- GCODE folder permissions'
 ln -s /media/ /home/pi/printer_data/gcodes/USB
 chown pi /home/pi/printer_data/gcodes/USB
-mkdir /home/pi/printer_data/gcodes/.JOB
+mkdir -p /home/pi/printer_data/gcodes/.JOB
 chown pi /home/pi/printer_data/gcodes/.JOB
 
 echo '---------------- Syncraft BacklashCompensation Install'
 cat "$SCRIPTPATH"/syncraft-backlash-watcher.service > /etc/systemd/system/syncraft-backlash-watcher.service
 systemctl daemon-reload
-cd ~/home/pi/syncraft-scripts/scripts
+cd /home/pi/syncraft-scripts/scripts
 pip3 install watchdog
 systemctl enable syncraft-backlash-watcher
 systemctl restart syncraft-backlash-watcher.service
+
+echo '---------------- Instalação Concluída'
+echo "Modelo da impressora: $PRINTER_MODEL"
+echo "Configuração salva em: /home/pi/syncraft-scripts/printer_model.conf"
