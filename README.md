@@ -1,81 +1,141 @@
-# Syncraft scripts
+# Syncraft Scripts
 
-This repository contains scripts for Syncraft 3D printers.
+Este repositório contém scripts para impressoras 3D Syncraft.
 
-## Building a machine
+## Índice
 
-1. Clone the repository at home (`~`):
-	```bash
-	cd ~
-	```
-	```bash
-	git clone https://github.com/Syncraft-Technologies/syncraft-scripts.git
-	```
-2. Run `install.sh` as superuser
+- [Requisitos](#requisitos)
+- [Instalação](#instalação)
+- [Configuração da Máquina](#configuração-da-máquina)
+- [Instalação dos Serviços](#instalação-dos-serviços)
+- [Gerenciamento dos Serviços](#gerenciamento-dos-serviços)
+- [Desinstalação](#desinstalação)
+- [Solução de Problemas](#solução-de-problemas)
 
-	2.1. Install Syncraft X1
-	
-	```bash
-	sudo ./syncraft-scripts/build/install.sh X1
-	```
+## Requisitos
 
-	2.2. Install Syncraft IDEX
-	
-	```bash
-	sudo ./syncraft-scripts/build/install.sh IDEX
-	```
+- Sistema operacional Linux
+- Acesso de superusuário (sudo)
+- Git instalado
 
-## Machine configuration
+## Instalação
 
-You can create a file called `syncraft-machine.json` at home (`~`) in order to specify desired configurations.
+1. Navegue até o diretório home:
+   ```bash
+   cd ~
+   ```
 
-### Allowed values
+2. Clone o repositório:
+   ```bash
+   git clone https://github.com/Syncraft-Technologies/syncraft-scripts.git
+   ```
 
-#### `Backlash Compensation`
+## Configuração da Máquina
 
-1. X1
+Antes de instalar os serviços, você deve criar um arquivo de configuração chamado `syncraft-machine.json` no diretório home (`~`).
 
-	Set in the file `scripts/offsets.ini` the compensation in X and Y axis.
-	```bash
-	X: 0.0
-	Y: 0.0
-	```
+### Exemplo de configuração:
 
-2. IDEX
-	
-	Set in the file `scripts/offsets_T0.ini` the compensation in X and Y axis.
-	```bash
-	X: 0.0
-	Y: 0.0
-	```
+```json
+{
+  "printerModel": "X1",
+  "bc_x0": 0.0,
+  "bc_x1": 0.0,
+  "bc_y0": 0.0,
+  "bc_y1": 0.0,
+  "bootVideo": "default.mp4",
+  "welcomeScreen": false
+}
+```
 
-	Set in the file `scripts/offsets_T1.ini` the compensation in X and Y axis.
-	```bash
-	X: 0.0
-	Y: 0.0 // The same from T0
-	```
+### Parâmetros de configuração:
 
-Once changed offsets files, it´s necessary restart the service:
- ```bash
+| Parâmetro | Descrição | Valores Aceitos |
+|-----------|-----------|-----------------|
+| `printerModel` | Modelo da impressora | `"X1"` ou `"IDEX"` |
+| `bc_x0` | Compensação de backlash no eixo X para extrusora 0 (X1) ou extrusora principal (IDEX) | Número decimal |
+| `bc_y0` | Compensação de backlash no eixo Y para extrusora 0 (X1) ou extrusora principal (IDEX) | Número decimal |
+| `bc_x1` | Compensação de backlash no eixo X para extrusora 1 (apenas modelo IDEX) | Número decimal |
+| `bc_y1` | Compensação de backlash no eixo Y para extrusora 1 (apenas modelo IDEX) | Número decimal |
+| `bootVideo` | Vídeo reproduzido durante a inicialização | Nome do arquivo (com extensão) do diretório `boot_videos` |
+| `welcomeScreen` | Ativa a reprodução do vídeo de primeira inicialização | `true` ou `false` |
+
+## Instalação dos Serviços
+
+⚠️ **Importante**: Certifique-se de que o arquivo `syncraft-machine.json` esteja configurado antes de prosseguir.
+
+Execute o script de instalação como superusuário:
+
+```bash
+sudo ./syncraft-scripts/build/install.sh
+```
+
+## Gerenciamento dos Serviços
+
+### Reiniciar o serviço após alterações nos parâmetros
+
+Quando você alterar os valores de compensação de backlash, é necessário reiniciar o serviço:
+
+```bash
 sudo systemctl restart syncraft-backlash-watcher.service
 ```
 
-If needed, check the status of the service with the following command:
- ```bash
+### Verificar o status do serviço
+
+Para verificar se o serviço está funcionando corretamente:
+
+```bash
 sudo systemctl status syncraft-backlash-watcher.service
 ```
 
-#### `bootVideo`
+### Outros comandos úteis
 
-Will be the video played on boot. Must be a string with any of the file names (with extension) from the `boot_videos` directory.
+- **Parar o serviço:**
+  ```bash
+  sudo systemctl stop syncraft-backlash-watcher.service
+  ```
 
-#### `welcomeScreen`
+- **Iniciar o serviço:**
+  ```bash
+  sudo systemctl start syncraft-backlash-watcher.service
+  ```
 
-Set this to `true` if you want the `first_boot.mp4` video to play once on the next startup.
+- **Verificar logs do serviço:**
+  ```bash
+sudo journalctl -u syncraft-backlash-watcher.service -f
+  ```
 
-## Remove all services
+## Desinstalação
 
-1. Run `uninstall.sh` as superuser
-	```bash
-	sudo ./syncraft-scripts/build/uninstall.sh
-	```
+Para remover todos os serviços instalados:
+
+```bash
+sudo ./syncraft-scripts/build/uninstall.sh
+```
+
+## Solução de Problemas
+
+### O serviço não inicia
+
+1. Verifique se o arquivo `syncraft-machine.json` existe e está no formato correto
+2. Verifique os logs do serviço para identificar erros específicos
+3. Certifique-se de que todos os arquivos de vídeo referenciados existem no diretório apropriado
+
+### Alterações na configuração não surtem efeito
+
+1. Certifique-se de reiniciar o serviço após fazer alterações no arquivo de configuração
+2. Verifique se o arquivo JSON possui sintaxe válida
+
+### Arquivo de configuração não encontrado
+
+O arquivo `syncraft-machine.json` deve estar localizado no diretório home do usuário (`~/syncraft-machine.json`).
+
+---
+
+## Contribuição
+
+Para relatar problemas ou sugerir melhorias, abra uma issue no [repositório oficial](https://github.com/Syncraft-Technologies/syncraft-scripts).
+
+## Licença
+
+Este projeto é mantido pela Syncraft Technologies. Consulte o arquivo LICENSE para mais informações.
