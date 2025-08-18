@@ -102,7 +102,7 @@ sudo systemctl status syncraft-backlash-watcher.service
 
 - **Verificar logs do serviço:**
   ```bash
-sudo journalctl -u syncraft-backlash-watcher.service -f
+  sudo journalctl -u syncraft-backlash-watcher.service -f
   ```
 
 ## Desinstalação
