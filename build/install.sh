@@ -36,7 +36,6 @@ load_printer_model
 
 echo '---------------- Configuração do Modelo da Impressora'
 echo "MODELO DETECTADO: $PRINTER_MODEL"
-echo "MODEL=$PRINTER_MODEL" > /home/pi/syncraft-scripts/printer_model.conf
 
 SCRIPTPATH=$(dirname -- "$(readlink -f -- "$0")")
 
@@ -78,5 +77,4 @@ systemctl enable syncraft-backlash-watcher
 systemctl restart syncraft-backlash-watcher.service
 
 echo '---------------- Instalação Concluída'
-echo "Modelo da impressora: $PRINTER_MODEL"
-echo "Configuração salva em: /home/pi/syncraft-scripts/printer_model.conf"
+echo "Modelo da impressora configurada: $PRINTER_MODEL"
