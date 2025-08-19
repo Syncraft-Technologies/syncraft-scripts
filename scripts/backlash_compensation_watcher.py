@@ -25,7 +25,7 @@ def get_script_path():
     else:
         return "/home/pi/syncraft-scripts/scripts/backlash_compensation_x1.py"
 
-MAX_FILE_SIZE_MB = 30
+MAX_FILE_SIZE_MB = 100
 
 class GcodeHandler(FileSystemEventHandler):
     def on_created(self, event):
